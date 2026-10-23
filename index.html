@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FMCG demand forecasting and inventory planning prototype using synthetic demonstration data.">
+  <title>DemandIQ | FMCG Forecasting</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">D</span><div><strong>DemandIQ</strong><small>SUPPLY CHAIN INTELLIGENCE</small></div></div>
+    <div class="top-actions"><span class="demo-pill">● SYNTHETIC DEMO DATA</span><span class="avatar">SC</span></div>
+  </header>
+  <main class="page">
+    <section class="intro">
+      <div><p class="eyebrow">FORECASTING WORKSPACE / FMCG</p><h1>Demand & inventory overview</h1><p class="subhead">Turn demand signals into clearer replenishment decisions.</p></div>
+      <div class="date-chip" id="todayLabel">Planning workspace</div>
+    </section>
+
+    <section class="filters panel">
+      <div class="field"><label for="skuSelect">Product / SKU</label><select id="skuSelect"></select></div>
+      <div class="field"><label for="dcSelect">Distribution center</label><select id="dcSelect"></select></div>
+      <div class="field"><label for="horizonSelect">Forecast horizon</label><select id="horizonSelect"><option value="7">Next 7 days</option><option value="14" selected>Next 14 days</option><option value="30">Next 30 days</option></select></div>
+      <button id="refreshBtn" class="primary">Refresh forecast <span>↗</span></button>
+    </section>
+
+    <section class="kpis">
+      <article class="kpi panel"><div class="kpi-head"><span>Forecast demand</span><span class="kpi-icon blue">↗</span></div><div class="kpi-value" id="forecastTotal">—</div><div class="kpi-foot">units over selected horizon</div></article>
+      <article class="kpi panel"><div class="kpi-head"><span>Available inventory</span><span class="kpi-icon purple">▤</span></div><div class="kpi-value" id="inventoryValue">—</div><div class="kpi-foot" id="inventoryFoot">current stock on hand</div></article>
+      <article class="kpi panel"><div class="kpi-head"><span>Stock risk</span><span class="kpi-icon orange">!</span></div><div class="kpi-value" id="riskValue">—</div><div class="kpi-foot" id="riskFoot">based on forecast vs. stock</div></article>
+      <article class="kpi panel"><div class="kpi-head"><span>Model test WAPE</span><span class="kpi-icon green">◎</span></div><div class="kpi-value" id="wapeValue">—</div><div class="kpi-foot">held-out synthetic history</div></article>
+    </section>
+
+    <section class="main-grid">
+      <article class="panel chart-panel">
+        <div class="panel-title"><div><h2>Demand forecast</h2><p>Recent observed sales and projected daily demand</p></div><span class="legend"><i></i> Actual <i class="forecast-dot"></i> Forecast</span></div>
+        <div class="chart-wrap"><canvas id="demandChart" aria-label="Actual sales and forecast chart"></canvas></div>
+      </article>
+      <article class="panel signal-panel">
+        <div class="panel-title"><div><h2>Forecast drivers</h2><p>Model's directional feature signals</p></div><span class="info">i</span></div>
+        <div id="drivers" class="drivers"></div>
+        <div class="note">Driver scores are directional estimates from this prototype model, not causal proof.</div>
+      </article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel inventory-panel">
+        <div class="panel-title"><div><h2>Replenishment recommendation</h2><p>Suggested quantity includes a configurable safety buffer.</p></div></div>
+        <div class="recommendation">
+          <div><span class="rec-label">Suggested order quantity</span><strong id="orderQty">—</strong><small>units to cover horizon + safety stock</small></div>
+          <span id="statusPill" class="status">Calculating</span>
+        </div>
+        <div class="progress-label"><span>Forecast coverage</span><strong id="coverageText">—</strong></div>
+        <div class="progress-track"><div id="coverageBar" class="progress-bar"></div></div>
+        <div class="rec-detail" id="recommendationText"></div>
+      </article>
+      <article class="panel table-panel">
+        <div class="panel-title"><div><h2>Upcoming daily forecast</h2><p>First 7 forecast days</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Date</th><th>Demand</th><th>Promo</th><th>Risk</th></tr></thead><tbody id="forecastRows"></tbody></table></div>
+      </article>
+    </section>
+    <footer><span>DemandIQ Prototype · Built for hackathon demonstration</span><span>All products, centers, and sales are simulated.</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
